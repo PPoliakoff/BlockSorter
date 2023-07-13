@@ -17,12 +17,20 @@ body {
   padding: 10px;
   color: white;
   font-size: x-large;
-  border: ridge 3px red;
+  /*border: ridge 3px red;*/
 }
 #buttonRestart {
   grid-row: 1;
   grid-column: 1;
   justify-self: end;
+  align-self: stretch;
+  margin: 20px 10px;
+}
+
+#buttonSkip {
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: start;
   align-self: stretch;
   margin: 20px 10px;
 }

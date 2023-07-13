@@ -4,12 +4,14 @@ const dialogButton = document.getElementById("dialogButton");
 const divTitle = document.getElementById("divTitle");
 const canvas = document.getElementById("canvasGame");
 const buttonRestart = document.getElementById("buttonRestart");
+const buttonSkip = document.getElementById("buttonSkip");
 const ctx = canvas.getContext("2d");
+const LAST_TUTORIAL_LEVEL = 5;
 const color1 = ["#0000FF", "#00FF00", "#FF0000", "#FFFF00", "#FF00FF", "#00FFFF", "#CF8000"];
 const color2 = ["#00008F", "#008F00", "#8F0000", "#8F8F00", "#8F008F", "#008F8F", "#804000"];
 const levelDefinitions = [ // [ nTracks , trackSize]  Warning TrackSize<=Ntracks+1 NTracks max= 8 
-    [2, 2], [2, 3], [3, 2], [3, 3], [3, 4], [4, 3], [4, 4], [4, 5], [5, 4], [5, 5],
-    [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [7, 3], [7, 4], [8, 4], [8, 5], [8, 6],
+    [2, 3], [3, 2], [3, 3], [3, 4], [4, 3], [4, 4], [4, 5], [5, 4], [5, 5],
+    [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [7, 3], [7, 4], [7, 5], [8, 4], [8, 5], [8, 6],
     [8, 7], [8, 8], [8, 9]
 ];
 let tracks = [];
@@ -198,6 +200,10 @@ function newLevel() {
     nTracks = levelDefinitions[actualLevel - 1][0];
     trackSize = levelDefinitions[actualLevel - 1][1];
 
+
+    if (currentLevel > LAST_TUTORIAL_LEVEL) {
+        buttonSkip.style.visibility = "collapse"
+    }
     dialogBox.style.visibility = "collapse";
     divTitle.innerHTML = "Block Sorter 2023<br>Level : " + currentLevel;
 
@@ -267,8 +273,14 @@ dialogButton.onclick = function (event) {
 buttonRestart.onclick = function (event) {
     newLevel();
     canvasRedraw();
-
 }
+
+buttonSkip.onclick = function (event) {
+    currentLevel = LAST_TUTORIAL_LEVEL + 1;
+    newLevel();
+    canvasRedraw();
+}
+
 //main program
 //=============================================
 newLevel();
