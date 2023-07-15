@@ -9,13 +9,18 @@
   <body>
     <div class="divContainer">
       <div id="divTitle">Block Sorter 2023</div>
-      <button id="buttonRestart">Restart Level</button>
-      <button id="buttonSkip">Skip Tutorial</button>
-
-      <canvas id="canvasGame"></canvas>
-      <div id="divDialog">
+      <div class="divToolbar">
+        <button id="buttonRestart">Restart Level</button>
+        <button id="buttonSkip">Skip Tutorial</button>
+      </div>
+      <div class="divCanvas"><canvas id="canvasGame"></canvas></div>
+      <div id="divDialog" class="dialog">
         <div id="dialogMessage">You win.</div>
         <button id="dialogButton">Start Next Level</button>
+      </div>
+      <div id="divDialogLost" class="dialog">
+        <div id="dialogMessageLost">game Over</div>
+        <button id="dialogButtonRetry">Try again</button>
       </div>
     </div>
     <script src="script.js"></script>

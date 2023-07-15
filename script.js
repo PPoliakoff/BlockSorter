@@ -1,6 +1,8 @@
 // global variables
 const dialogBox = document.getElementById("divDialog");
+const divDialogLost = document.getElementById("divDialogLost");
 const dialogButton = document.getElementById("dialogButton");
+const dialogButtonRetry = document.getElementById("dialogButtonRetry");
 const divTitle = document.getElementById("divTitle");
 const canvas = document.getElementById("canvasGame");
 const buttonRestart = document.getElementById("buttonRestart");
@@ -10,16 +12,44 @@ const LAST_TUTORIAL_LEVEL = 5;
 const color1 = ["#0000FF", "#00FF00", "#FF0000", "#FFFF00", "#FF00FF", "#00FFFF", "#CF8000"];
 const color2 = ["#00008F", "#008F00", "#8F0000", "#8F8F00", "#8F008F", "#008F8F", "#804000"];
 const levelDefinitions = [ // [ nTracks , trackSize]  Warning TrackSize<=Ntracks+1 NTracks max= 8 
-    [2, 3], [3, 2], [3, 3], [3, 4], [4, 3], [4, 4], [4, 5], [5, 4], [5, 5],
-    [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [7, 3], [7, 4], [7, 5], [8, 4], [8, 5], [8, 6],
-    [8, 7], [8, 8], [8, 9]
+    [2, 3],
+    [3, 2],
+    [3, 3],
+    [3, 4],
+    [4, 3],
+    [5, 3],
+    [4, 4],
+    [6, 3],
+    [4, 5],
+    [5, 4],
+    [7, 3],
+    [6, 4],
+    [8, 3],
+    [5, 5],
+    [7, 4],
+    [5, 6],
+    [6, 5],
+    [8, 4],
+    [7, 5],
+    [6, 6],
+    [8, 5],
+    [6, 7],
+    [7, 6],
+    [8, 6],
+    [7, 7],
+    [7, 8],
+    [8, 7],
+    [8, 8],
+    [8, 9],
+
 ];
 let tracks = [];
-const selectedBlocks = [];
+let selectedBlocks = [];
 
 let nTracks;
 let trackSize;
 let currentLevel = 1;
+let nMoves;
 
 //classes
 class Track {
@@ -157,13 +187,16 @@ function clickGame(xpos) {
     const gameLeftMargin = (canvas.width - trackDistance * nTracks) / 2
     const selectedX = Math.floor((xpos - (gameLeftMargin)) / trackDistance);
 
-    if (selectedX >= 0 && selectedX < nTracks && tracks[selectedX].isWin() === false) {
+    if (nMoves > 0 && selectedX >= 0 && selectedX < nTracks && tracks[selectedX].isWin() === false) {
         if (selectedBlocks.length > 0) {
             if (tracks[selectedX].getNumberOfFreeSpaces() >= selectedBlocks.length) {
                 const nSelected = selectedBlocks.length;
                 for (let i = 0; i < nSelected; i++) {
                     tracks[selectedX].pushBlock(selectedBlocks.pop());
                 }
+                nMoves--;
+                updateTitle();
+
             }
         }
         else {
@@ -180,6 +213,9 @@ function clickGame(xpos) {
 
             dialogBox.style.visibility = "visible";
         }
+        else if (nMoves === 0) {
+            divDialogLost.style.visibility = "visible";
+        }
         canvasRedraw();
     }
 }
@@ -194,19 +230,25 @@ function gameWin() {
 
 }
 
+function updateTitle() {
+    divTitle.innerHTML = "Block Sorter Level : " + currentLevel + "<br>" + nMoves + " moves remain";
+}
+
 function newLevel() {
     const tmpBlocks = [];
     const actualLevel = (currentLevel <= levelDefinitions.length) ? currentLevel : levelDefinitions.length;
     nTracks = levelDefinitions[actualLevel - 1][0];
     trackSize = levelDefinitions[actualLevel - 1][1];
-
+    nMoves = (nTracks) * (trackSize) * 2;
 
     if (currentLevel > LAST_TUTORIAL_LEVEL) {
         buttonSkip.style.visibility = "collapse"
     }
     dialogBox.style.visibility = "collapse";
-    divTitle.innerHTML = "Block Sorter 2023<br>Level : " + currentLevel;
+    divDialogLost.style.visibility = "collapse";
+    updateTitle();
 
+    selectedBlocks = [];
     tracks = [];
     for (let i = 0; i < nTracks; i++) {
         const track = new Track(trackSize);
@@ -269,6 +311,10 @@ dialogButton.onclick = function (event) {
     canvasRedraw();
 }
 
+dialogButtonRetry.onclick = function (event) {
+    newLevel();
+    canvasRedraw();
+}
 
 buttonRestart.onclick = function (event) {
     newLevel();
