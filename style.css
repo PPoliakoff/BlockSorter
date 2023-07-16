@@ -1,9 +1,13 @@
 body {
   background-color: black;
 }
-
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
 .divContainer {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: grid;
   grid-template-rows: 2fr 1fr 25fr;
@@ -19,11 +23,12 @@ body {
   font-size: x-large;
   /* border: ridge 3px red;*/
 }
-.divToolbar {
+#divToolbar {
   grid-row: 2;
   grid-column: 1;
   justify-self: center;
   height: fit-content;
+  visibility: collapse;
   /* border: ridge 3px red; */
 }
 
